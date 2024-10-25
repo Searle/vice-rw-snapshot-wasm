@@ -1,0 +1,9 @@
+{
+    "files.associations": {
+        "lib.h": "c",
+        "snapshot.h": "c",
+        "archdep.h": "c",
+        "emscripten.h": "c"
+    },
+    "C_Cpp.errorSquiggles": "enabled"
+}
