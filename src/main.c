@@ -1,6 +1,8 @@
 #include <stdio.h>
+
 #include "snapshot.h"
 #include "archdep.h"
+#include "c64-snapshot.h"
 
 int create1()
 {
@@ -66,7 +68,58 @@ int read1()
     return 0;
 }
 
+/*
+EMSCRIPTEN_KEEPALIVE
+int safe_c64_snapshot_read(const char *filename, int flag)
+{
+    // Run the FS operation within an EM_ASM block with try-catch
+    int result = EM_ASM_INT({
+        try {
+            const data = c64_snapshot_read("/tmp.vsf", 0);
+            return 0;
+        } catch (e) {
+            return -1;
+        } }, filename);
+
+    return result;
+}
+*/
+
+int read2()
+{
+    printf("Hello World!1\n");
+
+    EM_ASM({
+        console.log("READ1", process.cwd());
+        const data = fs.readFileSync('assets/vice-snapshot-20241025205910.vsf');
+        const uint8Data = new Uint8Array(data);
+
+        // FS.writeFile not FS_writeFile !
+        const f = Module.FS.writeFile("/tmp.vsf", data);
+    });
+
+    printf("READ2\n");
+    app_init();
+    int res = c64_snapshot_read("/tmp.vsf", 0);
+    snapshot_display_error();
+    printf("RES=%d\n", res);
+
+    snapshot_display_error();
+
+    snapshot_set_error(0);
+
+    EM_ASM({
+        console.log("READ3");
+        const content1 = Module.FS.readFile("/tmp.vsf");
+        console.log("File content1:", content1);
+    });
+
+    // emscripten_run_script("Module.finish_main();");
+
+    return 0;
+}
+
 int main()
 {
-    read1();
+    read2();
 }

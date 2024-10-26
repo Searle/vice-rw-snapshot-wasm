@@ -3,7 +3,14 @@
         "lib.h": "c",
         "snapshot.h": "c",
         "archdep.h": "c",
-        "emscripten.h": "c"
+        "emscripten.h": "c",
+        "array": "c",
+        "span": "c",
+        "string": "c",
+        "string_view": "c",
+        "vector": "c",
+        "mos6510dtv.h": "c",
+        "alarm.h": "c"
     },
     "C_Cpp.errorSquiggles": "enabled"
 }
